@@ -784,24 +784,28 @@ function startGame() {
   clearInterval(G.timerInterval);
   G.timer = 0;
   updateTimer();
-  setStatus('');
+  setStatus('Generating…', '');
 
-  const result = buildPuzzle(G.n, targetClues(G.n, G.difficulty));
-  if (!result) return;
+  // Yield to browser so the status message renders before synchronous generation blocks
+  setTimeout(() => {
+    const result = buildPuzzle(G.n, targetClues(G.n, G.difficulty));
+    if (!result) { setStatus('Failed to generate puzzle. Try again.', 'err'); return; }
 
-  G.grid = [...result.puzzle];
-  G.solution = [...result.solution];
-  G.clues = result.puzzle.map(v => v !== EMPTY);
-  G.errors = new Array(G.n * G.n).fill(false);
-  G.won = false;
+    G.grid = [...result.puzzle];
+    G.solution = [...result.solution];
+    G.clues = result.puzzle.map(v => v !== EMPTY);
+    G.errors = new Array(G.n * G.n).fill(false);
+    G.won = false;
 
-  ['check-btn', 'hint-btn', 'solve-btn'].forEach(id => {
-    document.getElementById(id).disabled = false;
-  });
+    ['check-btn', 'hint-btn', 'solve-btn'].forEach(id => {
+      document.getElementById(id).disabled = false;
+    });
 
-  renderGrid();
+    renderGrid();
+    setStatus('');
 
-  G.timerInterval = setInterval(() => { G.timer++; updateTimer(); }, 1000);
+    G.timerInterval = setInterval(() => { G.timer++; updateTimer(); }, 1000);
+  }, 0);
 }
 
 function updateTimer() {
@@ -921,6 +925,17 @@ function clearCells() {
     if (!G.clues[i]) G.grid[i] = EMPTY;
   }
   G.errors = new Array(G.n * G.n).fill(false);
+  if (G.won) {
+    // Re-enable action buttons that were disabled on win/solve
+    ['check-btn', 'hint-btn', 'solve-btn'].forEach(id => {
+      document.getElementById(id).disabled = false;
+    });
+    // Restart timer from zero
+    clearInterval(G.timerInterval);
+    G.timer = 0;
+    updateTimer();
+    G.timerInterval = setInterval(() => { G.timer++; updateTimer(); }, 1000);
+  }
   G.won = false;
   renderGrid();
   setStatus('');
