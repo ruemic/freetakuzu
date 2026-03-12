@@ -41,3 +41,4 @@ Embed or link when:
 - ruedoku.com — Sudoku
 - freekakuro.com — Kakuro
 - freenonograms.com — Nonograms
+- freereversi.com — Reversi/Othello
