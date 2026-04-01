@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-04-01
+
+### Improved
+- Deploy: updated Radicchio deploy workflow and added repo-owned deploy verifier for reliable CI pushes
+
 ## 2026-03-22
 
 ### Improved
