@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-04-02
+
+### Added
+- Strategies guide page covering common Takuzu solving approaches; linked from the homepage and added to the sitemap
+
+### Fixed
+- Removed FAQPage JSON-LD from the strategies page to prevent zero-click suppression in search results
+
 ## 2026-04-01
 
 ### Improved
